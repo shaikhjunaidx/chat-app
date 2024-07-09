@@ -14,7 +14,7 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-		connect((message) => {
+		setupWebSocketConnection((message) => {
 			console.log("New Message")
 			this.setState(prevState => ({
 				chatHistory: [...prevState.chatHistory, message]
@@ -25,7 +25,7 @@ class App extends Component {
 		});
 	}
 
-	send(event) {
+	handleKeyPress(event) {
 		if (event.keyCode === 13) {
 			sendMessage(event.target.value);
 			event.target.value = "";
@@ -37,7 +37,7 @@ class App extends Component {
 			<div className='App'>
 				<Header />
 				<ChatHistory chatHistory={this.state.chatHistory} />
-				<ChatInput send={this.send} />
+				<ChatInput handleKeyPress={this.handleKeyPress} />
 			</div>
 		);
 	}

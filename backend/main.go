@@ -3,13 +3,14 @@ package main
 import (
 	"fmt"
 	"net/http"
+
 	"github.com/shaikhjunaidx/chat-app/pkg/websocket"
 )
 
-func serveWS(pool *websocket.Pool, w http.ResponseWriter, r *http.Request){
+func handleWebSocketRequest(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Websocket endpoint reached")
 
-	conn, err := websocket.Upgrade(w, r)
+	conn, err := websocket.UpgradeHTTPToWebSocket(w, r)
 
 	if err != nil {
 		fmt.Fprintf(w, "%+v\n", err)
@@ -29,7 +30,7 @@ func setUpRoutes() {
 	go pool.Start()
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		serveWS(pool, w, r)
+		handleWebSocketRequest(pool, w, r)
 	})
 }
 
